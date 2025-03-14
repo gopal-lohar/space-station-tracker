@@ -1,5 +1,6 @@
-// Fetching data from api
+import { EciVec3 } from "satellite.js";
 
+// Fetching data from api
 export interface TLE {
   satelliteId: number;
   name: string;
@@ -22,5 +23,26 @@ export interface TLESearchResponse {
     first: string;
     previous: string;
     last: string;
+  };
+}
+
+// State Vector for the satellite
+export interface StateVector {
+  geodetic: {
+    position: {
+      latitude: number;
+      longitude: number;
+      altitude: number;
+    };
+    velocity: number; // in m/s
+  };
+  eci: {
+    position: EciVec3<number>;
+    velocity: EciVec3<number>;
+    // basically = {
+    //   x: number;
+    //   y: number;
+    //   z: number;
+    // }
   };
 }

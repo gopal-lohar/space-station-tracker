@@ -1,8 +1,6 @@
+import { calculateStateVector } from "./calculateStateVector";
 import { getCssTle, getIssTle, getTle, searchSatellites } from "./getTle";
-
-async function printNumber(num: number): Promise<void> {
-  console.log("the number is ", num);
-}
+import * as satellite from "satellite.js";
 
 async function main() {
   console.log("operation started");
@@ -10,6 +8,13 @@ async function main() {
 
   const isstle = await getIssTle();
   const csstle = await getCssTle();
+
+  const satrec = satellite.twoline2satrec(isstle.line1, isstle.line2);
+  const now = new Date();
+
+  const issStateVector = calculateStateVector(now, satrec);
+
+  console.log("current iss state vector", issStateVector);
 
   console.timeEnd("operation");
   console.log("operation completed");
