@@ -1,11 +1,11 @@
+import * as satellite from "satellite.js";
 import {
   calculateStateVector,
   calculateStateVectorRange,
-} from "./calculateStateVector";
+} from "./ganit/calculateStateVector";
+import { calculateVisibility } from "./ganit/calculateVisibility";
 import { getCssTle, getIssTle, getTle, searchSatellites } from "./getTle";
-import * as satellite from "satellite.js";
 import { formatTime } from "./helpers";
-import { calculateVisibility } from "./calculateVisibility";
 import { ObserverLocation, StateVector } from "./types";
 
 const SECOND = 1000;

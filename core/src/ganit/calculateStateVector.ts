@@ -1,5 +1,5 @@
 import * as satellite from "satellite.js";
-import { StateVector, StateVectorRange } from "./types";
+import { StateVector, StateVectorRange } from "../types";
 
 export function calculateStateVector(
   time: Date,

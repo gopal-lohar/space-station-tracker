@@ -1,4 +1,4 @@
-import { ObserverLocation, StateVector } from "./types";
+import { ObserverLocation, StateVector } from "../types";
 import * as satellite from "satellite.js";
 
 export function calculateVisibility(
