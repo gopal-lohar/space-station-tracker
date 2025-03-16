@@ -29,6 +29,11 @@ export async function searchSatellites(
   return await fetchData(`${API_URL}?search=${query}`);
 }
 
+export const satelliteIds = {
+  iss: 25544,
+  css: 48274,
+};
+
 // temporary functions to avoid API calling
 // TLE for International Space Station
 export async function getIssTle(): Promise<ApiResponse<TLE>> {

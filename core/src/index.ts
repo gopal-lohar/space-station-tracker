@@ -11,12 +11,6 @@ import { ObserverLocation, StateVector } from "./types";
 // Constants
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
-const HOUR = MINUTE * 60;
-
-const satelliteIds = {
-  iss: 25544,
-  css: 48274,
-};
 
 const observerLocation: ObserverLocation = {
   latitude: 26.231896,
