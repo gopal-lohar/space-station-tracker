@@ -5,10 +5,18 @@ import {
 import { getCssTle, getIssTle, getTle, searchSatellites } from "./getTle";
 import * as satellite from "satellite.js";
 import { formatTime } from "./helpers";
+import { calculateVisibility } from "./calculateVisibility";
+import { ObserverLocation, StateVector } from "./types";
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
+
+const observerLocation: ObserverLocation = {
+  latitude: 26.231896,
+  longitude: 78.205714,
+  elevation: 205,
+};
 
 async function main() {
   console.log("operation started\n");
@@ -39,6 +47,8 @@ async function main() {
   );
 
   console.log("\n\n Range: ", stateVectorRange);
+
+  calculateVisibility(issStateVector as StateVector, observerLocation, now);
 
   console.log("\noperation completed");
   console.timeEnd("operation");

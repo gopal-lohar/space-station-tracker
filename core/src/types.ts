@@ -32,7 +32,7 @@ export interface StateVector {
     position: {
       latitude: number;
       longitude: number;
-      altitude: number;
+      height: number;
     };
     velocity: number; // in m/s
   };
@@ -55,3 +55,9 @@ export type StateVectorRange = {
   errorCount: number; // number of state vectors went wrong
   error: string; // actual errors in the function itself
 };
+
+export interface ObserverLocation {
+  latitude: number;
+  longitude: number;
+  elevation: number; // meters above sea level
+}

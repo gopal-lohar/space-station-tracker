@@ -41,7 +41,7 @@ export function calculateStateVector(
       position: {
         latitude: satellite.degreesLat(positionGd.latitude),
         longitude: satellite.degreesLong(positionGd.longitude),
-        altitude: positionGd.height,
+        height: positionGd.height,
       },
       velocity: velocityMagnitude,
     },
