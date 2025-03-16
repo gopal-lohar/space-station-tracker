@@ -1,5 +1,5 @@
 import * as satellite from "satellite.js";
-import { StateVector } from "./types";
+import { StateVector, StateVectorRange } from "./types";
 
 export function calculateStateVector(
   time: Date,
@@ -50,4 +50,39 @@ export function calculateStateVector(
       velocity: velocityEci,
     },
   };
+}
+
+export function calculateStateVectorRange(
+  satrec: satellite.SatRec,
+  startTime: Date,
+  endTime: Date,
+  stepSeconds: number = 60,
+): StateVectorRange {
+  const data: StateVectorRange = {
+    stateVectors: [],
+    errorCount: 0,
+    error: "",
+  };
+
+  const currentTime = new Date(startTime);
+
+  if (startTime > endTime) {
+    data.error = "Start time must be before end time";
+    return data;
+  }
+
+  while (currentTime <= endTime) {
+    const stateVector = calculateStateVector(currentTime, satrec);
+    if (typeof stateVector !== "string") {
+      data.stateVectors.push({
+        time: new Date(currentTime),
+        stateVector,
+      });
+    } else {
+      data.errorCount++;
+    }
+    currentTime.setSeconds(currentTime.getSeconds() + stepSeconds);
+  }
+
+  return data;
 }

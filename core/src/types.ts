@@ -46,3 +46,12 @@ export interface StateVector {
     // }
   };
 }
+
+export type StateVectorRange = {
+  stateVectors: Array<{
+    time: Date;
+    stateVector: StateVector;
+  }>;
+  errorCount: number; // number of state vectors went wrong
+  error: string; // actual errors in the function itself
+};
