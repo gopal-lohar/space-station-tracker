@@ -26,6 +26,11 @@ export interface TLESearchResponse {
   };
 }
 
+export interface ApiResponse<T> {
+  error: string | null;
+  data: T | null;
+}
+
 // State Vector for the satellite
 export interface StateVector {
   geodetic: {

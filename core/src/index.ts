@@ -8,9 +8,15 @@ import { getCssTle, getIssTle, getTle, searchSatellites } from "./getTle";
 import { formatTime } from "./helpers";
 import { ObserverLocation, StateVector } from "./types";
 
+// Constants
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
+
+const satelliteIds = {
+  iss: 25544,
+  css: 48274,
+};
 
 const observerLocation: ObserverLocation = {
   latitude: 26.231896,
@@ -22,8 +28,16 @@ async function main() {
   console.log("operation started\n");
   console.time("operation");
 
-  const isstle = await getIssTle();
-  const csstle = await getCssTle();
+  // trying of emulate the go behavior for error handing (idk why)
+  const { data: isstle, error: isstleError } = await getIssTle();
+  const { data: csstle, error: csstleError } = await getCssTle();
+
+  if (!isstle || !csstle || isstleError || csstleError) {
+    console.error("Failed to fetch TLE data");
+    console.error("Error fetching ISS TLE:", isstleError);
+    console.error("Error fetching CSS TLE:", csstleError);
+    return;
+  }
 
   const satrec = satellite.twoline2satrec(isstle.line1, isstle.line2);
 
