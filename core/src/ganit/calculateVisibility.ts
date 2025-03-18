@@ -1,6 +1,6 @@
 import { ObserverLocation, StateVector } from "../types";
-import * as satellite from "satellite.js";
 import { calculateLookAngles, normalizeAzimuth } from "./calculateLookAngles";
+import { getSunElevationInDegrees } from "./sunCalculation";
 
 export function calculateVisibility(
   stateVector: StateVector,
@@ -12,4 +12,14 @@ export function calculateVisibility(
     azimuth: normalizeAzimuth(lookAngles.azimuth) * (180 / Math.PI),
     elevation: lookAngles.elevation * (180 / Math.PI),
   };
+  const sunElevationInDegrees = getSunElevationInDegrees(
+    observerLocation.latitude,
+    observerLocation.longitude,
+    time,
+  );
+  const sunAtSatelliteElevationInDegrees = getSunElevationInDegrees(
+    stateVector.geodetic.position.latitude,
+    stateVector.geodetic.position.longitude,
+    time,
+  );
 }

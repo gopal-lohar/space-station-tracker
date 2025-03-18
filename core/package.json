@@ -16,12 +16,14 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.5",
+    "@types/suncalc": "^1.9.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "axios": "^1.8.3",
     "nodemon": "^3.1.9",
-    "satellite.js": "^5.0.0"
+    "satellite.js": "^5.0.0",
+    "suncalc": "^1.9.0"
   }
 }
