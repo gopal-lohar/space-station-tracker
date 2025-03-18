@@ -1,5 +1,6 @@
 import { ObserverLocation, StateVector } from "../types";
 import * as satellite from "satellite.js";
+import { calculateLookAngles, normalizeAzimuth } from "./calculateLookAngles";
 
 export function calculateVisibility(
   stateVector: StateVector,
@@ -7,25 +8,8 @@ export function calculateVisibility(
   time: Date,
 ) {
   const lookAngles = calculateLookAngles(stateVector, observerLocation);
-  console.log("LOOK ANGLES: ", lookAngles);
-}
-
-function calculateLookAngles(
-  stateVector: StateVector,
-  observerLocation: ObserverLocation,
-): satellite.LookAngles {
-  const observerLocationGeodetic = {
-    longitude: satellite.degreesToRadians(observerLocation.longitude),
-    latitude: satellite.degreesToRadians(observerLocation.latitude),
-    height: observerLocation.elevation / 1000,
+  const lookAnglesInDegrees = {
+    azimuth: normalizeAzimuth(lookAngles.azimuth) * (180 / Math.PI),
+    elevation: lookAngles.elevation * (180 / Math.PI),
   };
-  const satellitePositionGeodetic = stateVector.geodetic.position;
-  const satelliteEcf = satellite.geodeticToEcf(satellitePositionGeodetic);
-
-  const lookAngles = satellite.ecfToLookAngles(
-    observerLocationGeodetic,
-    satelliteEcf,
-  );
-
-  return lookAngles;
 }
