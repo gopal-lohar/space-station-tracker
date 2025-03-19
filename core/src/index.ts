@@ -56,7 +56,15 @@ async function main() {
 
   console.log("\n\n Range: ", stateVectorRange);
 
-  calculateVisibility(issStateVector as StateVector, observerLocation, now);
+  const visibilityInfo = calculateVisibility(
+    issStateVector as StateVector,
+    observerLocation,
+    now,
+  );
+
+  console.log("Current Time: ", formatTime(now));
+
+  console.log("Visibility Info: ", visibilityInfo);
 
   console.log("\noperation completed");
   console.timeEnd("operation");
