@@ -50,7 +50,7 @@ async function updateData(satellites: SatelliteData[]) {
   for (const satellite of satellites) {
     console.log("Fetching data for ", satellite.name);
     let { data: satelliteTle, error: tleError } = await getTle(
-      satellite.satelliteId,
+      satellite.satelliteId
     );
     if (!satelliteTle || tleError) {
       console.error("Failed to fetch TLE data");
@@ -80,6 +80,39 @@ async function updateData(satellites: SatelliteData[]) {
   console.log("");
 }
 
+function formatMs(diffMs: number) {
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  diffMs %= 1000 * 60 * 60 * 24;
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  diffMs %= 1000 * 60 * 60;
+
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  diffMs %= 1000 * 60;
+
+  const seconds = Math.floor(diffMs / 1000);
+
+  return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+}
+
+function getUpdateStats(satellites: SatelliteData[]) {
+  satellites.forEach((satellite) => {
+    console.log("\n For ", satellite.name);
+    let updateInterval = 0;
+    let lastUpdateTime: Date | null = null;
+    satellite.tle.forEach((tle) => {
+      if (!lastUpdateTime) {
+        lastUpdateTime = new Date(tle.date);
+      } else {
+        updateInterval =
+          lastUpdateTime.getTime() - new Date(tle.date).getTime();
+        console.log("Update Interval: ", formatMs(updateInterval));
+        lastUpdateTime = new Date(tle.date);
+      }
+    });
+  });
+}
+
 async function check(fetchInterval: number) {
   await ensureDataDirExists();
 
@@ -97,6 +130,7 @@ async function check(fetchInterval: number) {
   ];
 
   console.log("Stored Data: ", satellites, "\n");
+  getUpdateStats(satellites);
 
   updateData(satellites);
   setInterval(() => {
