@@ -1,11 +1,11 @@
 import { ObserverLocation, StateVector } from "../types";
 import { calculateLookAngles, normalizeAzimuth } from "./calculateLookAngles";
+import { isIssIlluminated } from "./isIlluminated";
 import { getSunElevationInDegrees } from "./sunCalculation";
 
 interface VisibilityInfo {
   isVisible: boolean;
   isIlluminated: boolean;
-  sunAtSatelliteElevationInDegrees: number;
   isObserverInDarkness: boolean;
   sunElevationInDegrees: number;
   isSatelliteAboveHorizon: boolean;
@@ -31,20 +31,14 @@ export function calculateVisibility(
     observerLocation.longitude,
     time,
   );
-  const sunAtSatelliteElevationInDegrees = getSunElevationInDegrees(
-    stateVector.geodetic.position.latitude,
-    stateVector.geodetic.position.longitude,
-    time,
-  );
 
-  const isIlluminated = sunAtSatelliteElevationInDegrees > -0.83;
+  const isIlluminated = isIssIlluminated(stateVector, time);
   const isObserverInDarkness = sunElevationInDegrees <= -6;
-  const isSatelliteAboveHorizon = lookAnglesInDegrees.elevation > 10;
+  const isSatelliteAboveHorizon = lookAnglesInDegrees.elevation > 0;
 
   return {
     isVisible: isIlluminated && isObserverInDarkness && isSatelliteAboveHorizon,
     isIlluminated,
-    sunAtSatelliteElevationInDegrees,
     isObserverInDarkness,
     sunElevationInDegrees,
     isSatelliteAboveHorizon,
