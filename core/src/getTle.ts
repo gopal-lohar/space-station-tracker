@@ -24,7 +24,7 @@ export async function getTle(noradId: number): Promise<ApiResponse<TLE>> {
 }
 
 export async function searchSatellites(
-  query: string,
+  query: string
 ): Promise<ApiResponse<TLESearchResponse>> {
   return await fetchData(`${API_URL}?search=${query}`);
 }

@@ -3,7 +3,7 @@ import { StateVector, StateVectorRange } from "../types";
 
 export function calculateStateVector(
   time: Date,
-  satrec: satellite.SatRec,
+  satrec: satellite.SatRec
 ): StateVector | string {
   // Get position in Earth-Centered Inertial (ECI) coordinates
   const positionAndVelocity = satellite.propagate(satrec, time);
@@ -33,7 +33,7 @@ export function calculateStateVector(
   const velocityMagnitude = Math.sqrt(
     Math.pow(positionEci.x, 2) +
       Math.pow(positionEci.y, 2) +
-      Math.pow(positionEci.z, 2),
+      Math.pow(positionEci.z, 2)
   );
 
   return {
@@ -56,7 +56,7 @@ export function calculateStateVectorRange(
   satrec: satellite.SatRec,
   startTime: Date,
   endTime: Date,
-  stepSeconds: number = 60,
+  stepSeconds: number = 60
 ): StateVectorRange {
   const data: StateVectorRange = {
     stateVectors: [],

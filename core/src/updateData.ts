@@ -50,7 +50,7 @@ async function updateData(satellites: SatelliteData[]) {
   for (const satellite of satellites) {
     console.log("Fetching data for ", satellite.name);
     let { data: satelliteTle, error: tleError } = await getTle(
-      satellite.satelliteId,
+      satellite.satelliteId
     );
     if (!satelliteTle || tleError) {
       console.error("Failed to fetch TLE data");

@@ -19,7 +19,7 @@ interface VisibilityInfo {
 export function calculateVisibility(
   stateVector: StateVector,
   observerLocation: ObserverLocation,
-  time: Date,
+  time: Date
 ): VisibilityInfo {
   const lookAngles = calculateLookAngles(stateVector, observerLocation);
   const lookAnglesInDegrees = {
@@ -29,7 +29,7 @@ export function calculateVisibility(
   const sunElevationInDegrees = getSunElevationInDegrees(
     observerLocation.latitude,
     observerLocation.longitude,
-    time,
+    time
   );
 
   const isIlluminated = isIssIlluminated(stateVector, time);

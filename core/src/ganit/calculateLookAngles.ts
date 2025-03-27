@@ -3,7 +3,7 @@ import * as satellite from "satellite.js";
 
 export function calculateLookAngles(
   stateVector: StateVector,
-  observerLocation: ObserverLocation,
+  observerLocation: ObserverLocation
 ): satellite.LookAngles {
   const observerLocationGeodetic = {
     longitude: satellite.degreesToRadians(observerLocation.longitude),
@@ -15,7 +15,7 @@ export function calculateLookAngles(
 
   const lookAngles = satellite.ecfToLookAngles(
     observerLocationGeodetic,
-    satelliteEcf,
+    satelliteEcf
   );
 
   return lookAngles;
