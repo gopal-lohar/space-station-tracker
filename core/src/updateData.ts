@@ -39,7 +39,7 @@ async function getStoredTleData(satelliteId: number): Promise<TLE[] | null> {
 async function updateTleFile(satellite: SatelliteData[]) {
   for (const sat of satellite) {
     const filePath = `${DATA_DIR}/norad-${sat.satelliteId}.json`;
-    await fs.writeFile(filePath, JSON.stringify(sat.tle));
+    await fs.writeFile(filePath, JSON.stringify(sat.tle, null, 2));
   }
 }
 
@@ -50,7 +50,7 @@ async function updateData(satellites: SatelliteData[]) {
   for (const satellite of satellites) {
     console.log("Fetching data for ", satellite.name);
     let { data: satelliteTle, error: tleError } = await getTle(
-      satellite.satelliteId
+      satellite.satelliteId,
     );
     if (!satelliteTle || tleError) {
       console.error("Failed to fetch TLE data");
