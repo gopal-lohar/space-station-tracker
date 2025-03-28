@@ -3,22 +3,13 @@ import { calculateStateVector } from "./calculateStateVector";
 import { calculateVisibility } from "./calculateVisibility";
 import { expect, describe, it } from "vitest";
 import fs from "fs";
-
-const DATA_DIR = "./data";
-
-function getStoredTleData(): VisibilitySampleRecord[] | null {
-  const filePath = `${DATA_DIR}/sat_visibility_samples.json`;
-  try {
-    const data = fs.readFileSync(filePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    return null;
-  }
-}
+import { getDataFromDataDir } from "../helpers/filesystem";
 
 describe("#calculateVisibility", () => {
-  it("should return visible if iss is visible in sample data", () => {
-    let records = getStoredTleData();
+  it("should return visible if iss is visible in sample data", async () => {
+    let records = await getDataFromDataDir<VisibilitySampleRecord[]>(
+      "sat_visibility_samples.json",
+    );
     if (!records) {
       throw new Error("No data found");
     }

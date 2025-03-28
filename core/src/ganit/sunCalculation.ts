@@ -1,11 +1,20 @@
 import { getPosition } from "suncalc";
+import { ObserverLocation } from "../types";
 
-export function getSunElevationInDegrees(
-  latitude: number,
-  longitude: number,
-  date: Date
-): number {
-  const sunPosition = getPosition(date, latitude, longitude);
-  const sunElevation = sunPosition.altitude * (180 / Math.PI);
-  return sunElevation;
+export function sunCalculation(
+  observerLocation: ObserverLocation,
+  time: Date,
+): { sunElevationInDegrees: number; isObserverInDarkness: boolean } {
+  const sunPosition = getPosition(
+    time,
+    observerLocation.latitude,
+    observerLocation.longitude,
+  );
+  const sunElevationInDegrees = sunPosition.altitude * (180 / Math.PI);
+  const isObserverInDarkness = sunElevationInDegrees <= -6;
+
+  return {
+    sunElevationInDegrees,
+    isObserverInDarkness,
+  };
 }
