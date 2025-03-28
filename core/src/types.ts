@@ -66,3 +66,28 @@ export interface ObserverLocation {
   longitude: number;
   elevation: number; // meters above sea level
 }
+
+// visibility samples for testing
+interface Visibility {
+  startingTime: string;
+  endingTime: string;
+  startElevation: number;
+  maxElevation: number;
+  endElevation: number;
+  startDirection: number;
+  endDirection: number;
+  magnitude: number;
+}
+
+interface SatelliteData {
+  tle: TLE;
+  visibility: Visibility[];
+}
+
+export interface VisibilitySampleRecord {
+  recordDate: string;
+  dataTill: string;
+  observerLocation: ObserverLocation;
+  ISS: SatelliteData;
+  CSS: SatelliteData;
+}

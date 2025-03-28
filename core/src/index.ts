@@ -33,10 +33,8 @@ async function main() {
     return;
   }
 
-  const satrec = satellite.twoline2satrec(isstle.line1, isstle.line2);
-
   const now = new Date();
-  const issStateVector = calculateStateVector(now, satrec);
+  const issStateVector = calculateStateVector(now, isstle);
 
   console.log("TIME NOW: ", formatTime(now));
   if (typeof issStateVector === "string") {
@@ -48,7 +46,7 @@ async function main() {
   }
 
   const stateVectorRange = calculateStateVectorRange(
-    satrec,
+    isstle,
     now,
     new Date(now.getTime() + MINUTE * 5),
     30
