@@ -1,0 +1,188 @@
+[
+  {
+    "recordDate": "Fri 28 March 4:00:00PM IST",
+    "dataTill": "Tue 8 April 2025",
+    "ISS": {
+      "tle": {
+        "satelliteId": 25544,
+        "name": "ISS",
+        "date": "2025-03-28T03:20:02+00:00",
+        "line1": "1 25544U 98067A   25087.13891722  .00026637  00000+0  46979-3 0  9996",
+        "line2": "2 25544  51.6369 348.4472 0003631  58.3052 301.8291 15.50197518502597"
+      },
+      "visibility": [
+        {
+          "startingTime": "Sun 30 March 8:10:51PM IST",
+          "endingTime": "Sun 30 March 8:12:42PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 27.1,
+          "endElevation": 27.1,
+          "startDirection": 333,
+          "endDirection": 353,
+          "magnitude": -2.2
+        },
+        {
+          "startingTime": "Mon 31 March 7:22:37PM IST",
+          "endingTime": "Mon 31 March 7:26:25PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 21.6,
+          "endElevation": 18.2,
+          "startDirection": 350,
+          "endDirection": 72,
+          "magnitude": -2.8
+        },
+        {
+          "startingTime": "Tue 1 April 8:10:03PM IST",
+          "endingTime": "Tue 1 April 8:13:07PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 41.3,
+          "endElevation": 41.3,
+          "startDirection": 303,
+          "endDirection": 236,
+          "magnitude": -3.2
+        },
+        {
+          "startingTime": "Wed 2 April 7:21:08PM IST",
+          "endingTime": "Wed 2 April 7:26:59PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 83.0,
+          "endElevation": 16.2,
+          "startDirection": 320,
+          "endDirection": 136,
+          "magnitude": -4.7
+        },
+        {
+          "startingTime": "Thu 3 April 8:11:04PM IST",
+          "endingTime": "Thu 3 April 8:12:53PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 10.8,
+          "endElevation": 10.0,
+          "startDirection": 252,
+          "endDirection": 220,
+          "magnitude": -0.8
+        },
+        {
+          "startingTime": "Fri 4 April 7:20:33PM IST",
+          "endingTime": "Fri 4 April 7:25:53PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 22.4,
+          "endElevation": 10.0,
+          "startDirection": 287,
+          "endDirection": 180,
+          "magnitude": -1.8
+        }
+      ]
+    },
+    "CSS": {
+      "tle": {
+        "satelliteId": 48274,
+        "name": "CSS",
+        "date": "2025-03-28T04:48:35+00:00",
+        "line1": "1 48274U 21035A   25087.20040521  .00043694  00000+0  47870-3 0  9996",
+        "line2": "2 48274  41.4654 153.7518 0005093 114.3253 245.8119 15.62452694223491"
+      },
+      "visibility": [
+        {
+          "startingTime": "Tue 1 April 5:18:51AM IST",
+          "endingTime": "Tue 1 April 5:24:27AM IST",
+          "startElevation": 10.0,
+          "maxElevation": 30.0,
+          "endElevation": 10.0,
+          "startDirection": 325,
+          "endDirection": 94,
+          "magnitude": -2.4
+        },
+        {
+          "startingTime": "Wed 2 April 4:19:50AM IST",
+          "endingTime": "Wed 2 April 4:22:19AM IST",
+          "startElevation": 16.6,
+          "maxElevation": 16.9,
+          "endElevation": 10.0,
+          "startDirection": 16,
+          "endDirection": 68,
+          "magnitude": 3.6
+        },
+        {
+          "startingTime": "Thu 3 April 4:54:06AM IST",
+          "endingTime": "Thu 3 April 4:58:45AM IST",
+          "startElevation": 25.1,
+          "maxElevation": 61.0,
+          "endElevation": 10.0,
+          "startDirection": 320,
+          "endDirection": 115,
+          "magnitude": 1.3
+        },
+        {
+          "startingTime": "Fri 4 April 3:56:22AM IST",
+          "endingTime": "Fri 4 April 4:56:52AM IST",
+          "startElevation": 13.2,
+          "maxElevation": 13.2,
+          "endElevation": 10.0,
+          "startDirection": 86,
+          "endDirection": 91,
+          "magnitude": 7.3
+        },
+        {
+          "startingTime": "Fri 4 April 5:28:31AM IST",
+          "endingTime": "Fri 4 April 5:33:18AM IST",
+          "startElevation": 11.8,
+          "maxElevation": 23.2,
+          "endElevation": 10.0,
+          "startDirection": 273,
+          "endDirection": 165,
+          "magnitude": 2.0
+        },
+        {
+          "startingTime": "Sat 5 April 4:30:54AM IST",
+          "endingTime": "Sat 5 April 4:32:21AM IST",
+          "startElevation": 24.3,
+          "maxElevation": 24.3,
+          "endElevation": 10.0,
+          "startDirection": 145,
+          "endDirection": 137,
+          "magnitude": 4.0
+        },
+        {
+          "startingTime": "Sat 5 April 7:18:55PM IST",
+          "endingTime": "Sat 5 April 7:21:39PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 16.5,
+          "endElevation": 15.7,
+          "startDirection": 180,
+          "endDirection": 123,
+          "magnitude": 2.3
+        },
+        {
+          "startingTime": "Sun 6 April 7:52:40PM IST",
+          "endingTime": "Sun 6 April 7:56:12PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 88.0,
+          "endElevation": 64.7,
+          "startDirection": 234,
+          "endDirection": 59,
+          "magnitude": 0.1
+        },
+        {
+          "startingTime": "Mon 7 April 8:28:16PM IST",
+          "endingTime": "Mon 7 April 8:30:30PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 24.3,
+          "endElevation": 21.5,
+          "startDirection": 279,
+          "endDirection": 324,
+          "magnitude": 3.5
+        },
+        {
+          "startingTime": "Tue 8 April 7:25:48PM IST",
+          "endingTime": "Tue 8 April 7:31:49PM IST",
+          "startElevation": 10.0,
+          "maxElevation": 43.0,
+          "endElevation": 10.0,
+          "startDirection": 254,
+          "endDirection": 42,
+          "magnitude": 1.7
+        }
+      ]
+    }
+  }
+]
