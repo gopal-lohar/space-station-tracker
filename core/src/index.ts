@@ -33,7 +33,7 @@ async function main() {
     return;
   }
 
-  const now = new Date();
+  const now = new Date("2025-03-30T20:10:30+05:30");
   const issStateVector = calculateStateVector(now, isstle);
 
   console.log("TIME NOW: ", formatTime(now));

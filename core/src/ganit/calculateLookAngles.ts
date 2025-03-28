@@ -1,29 +1,65 @@
 import { ObserverLocation, StateVector } from "../types";
 import * as satellite from "satellite.js";
 
-export function calculateLookAngles(
+function calculateLookAnglesInRadians(
   stateVector: StateVector,
-  observerLocation: ObserverLocation
+  observerLocation: ObserverLocation,
 ): satellite.LookAngles {
   const observerLocationGeodetic = {
     longitude: satellite.degreesToRadians(observerLocation.longitude),
     latitude: satellite.degreesToRadians(observerLocation.latitude),
     height: observerLocation.elevation / 1000,
   };
-  const satellitePositionGeodetic = stateVector.geodetic.position;
+
+  // satellite.geodeticToEcf expects the location in geodetic coordinates
+  // IN RADIANS
+  const satellitePositionGeodetic = {
+    longitude: satellite.degreesToRadians(
+      stateVector.geodetic.position.longitude,
+    ),
+    latitude: satellite.degreesToRadians(
+      stateVector.geodetic.position.latitude,
+    ),
+    height: stateVector.geodetic.position.height,
+  };
+
   const satelliteEcf = satellite.geodeticToEcf(satellitePositionGeodetic);
 
   const lookAngles = satellite.ecfToLookAngles(
     observerLocationGeodetic,
-    satelliteEcf
+    satelliteEcf,
   );
 
   return lookAngles;
 }
 
-export function normalizeAzimuth(azimuth: number): number {
+function normalizeAzimuth(azimuth: number): number {
   // Normalize the azimuth to [-π, π] before converting to degrees
   while (azimuth > Math.PI) azimuth -= 2 * Math.PI;
   while (azimuth < -Math.PI) azimuth += 2 * Math.PI;
   return azimuth;
+}
+
+export function calculateLookAngles(
+  stateVector: StateVector,
+  observerLocation: ObserverLocation,
+): {
+  lookAnglesInDegrees: { azimuth: number; elevation: number };
+  isSatelliteAboveHorizon: boolean;
+  rangeSat: number;
+} {
+  const lookAngles = calculateLookAnglesInRadians(
+    stateVector,
+    observerLocation,
+  );
+  const lookAnglesInDegrees = {
+    azimuth: normalizeAzimuth(lookAngles.azimuth) * (180 / Math.PI),
+    elevation: lookAngles.elevation * (180 / Math.PI),
+  };
+
+  return {
+    lookAnglesInDegrees,
+    isSatelliteAboveHorizon: lookAngles.elevation > 0,
+    rangeSat: lookAngles.rangeSat, // in kilometers
+  };
 }
