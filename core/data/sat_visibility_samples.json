@@ -119,6 +119,16 @@
             "magnitude": 1.3
           },
           {
+            "startingTime": "2025-04-04T03:56:22+05:30",
+            "endingTime": "2025-04-04T03:56:52+05:30",
+            "startElevation": 13.2,
+            "maxElevation": 13.2,
+            "endElevation": 10.0,
+            "startDirection": 86,
+            "endDirection": 91,
+            "magnitude": 7.3
+          },
+          {
             "startingTime": "2025-04-04T05:28:31+05:30",
             "endingTime": "2025-04-04T05:33:18+05:30",
             "startElevation": 11.8,
