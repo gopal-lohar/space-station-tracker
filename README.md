@@ -94,7 +94,7 @@ npm run update-data
 - [x] TLE data retrieval mechanism
 - [x] Look Angle Calculation
 - [x] Sun Calculation and Testing
-- [ ] Look Angle cacluation testing
+- [x] Look Angle cacluation testing
 - [ ] Is Illuminated calculation
 - [ ] Is Illuminated calculation testing
 - [ ] Complete visibility prediction algorithm
