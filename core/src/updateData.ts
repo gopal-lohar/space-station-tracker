@@ -5,35 +5,18 @@
 
 import fs from "fs/promises";
 import { getTle, satelliteIds } from "./getTle";
-import { formatTime } from "./helpers";
+import { formatTime } from "./helpers/utils";
 import { TLE } from "./types";
-
-const DATA_DIR = "./data";
+import {
+  DATA_DIR,
+  ensureDataDirExists,
+  getDataFromDataDir,
+} from "./helpers/filesystem";
 
 interface SatelliteData {
   name: string;
   satelliteId: number;
   tle: TLE[];
-}
-
-async function ensureDataDirExists(): Promise<boolean> {
-  let error = false;
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch (error) {
-    error = true;
-  }
-  return true;
-}
-
-async function getStoredTleData(satelliteId: number): Promise<TLE[] | null> {
-  const filePath = `${DATA_DIR}/norad-${satelliteId}.json`;
-  try {
-    const data = await fs.readFile(filePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    return null;
-  }
 }
 
 async function updateTleFile(satellite: SatelliteData[]) {
@@ -50,7 +33,7 @@ async function updateData(satellites: SatelliteData[]) {
   for (const satellite of satellites) {
     console.log("Fetching data for ", satellite.name);
     let { data: satelliteTle, error: tleError } = await getTle(
-      satellite.satelliteId
+      satellite.satelliteId,
     );
     if (!satelliteTle || tleError) {
       console.error("Failed to fetch TLE data");
@@ -120,12 +103,16 @@ async function check(fetchInterval: number) {
     {
       name: "ISS",
       satelliteId: satelliteIds.iss,
-      tle: ((await getStoredTleData(satelliteIds.iss)) || []) as TLE[],
+      tle: ((await getDataFromDataDir<TLE[]>(
+        `norad-${satelliteIds.iss}.json`,
+      )) || []) as TLE[],
     },
     {
       name: "CSS",
       satelliteId: satelliteIds.css,
-      tle: ((await getStoredTleData(satelliteIds.css)) || []) as TLE[],
+      tle: ((await getDataFromDataDir<TLE[]>(
+        `norad-${satelliteIds.css}.json`,
+      )) || []) as TLE[],
     },
   ];
 

@@ -5,7 +5,7 @@ import {
 } from "./ganit/calculateStateVector";
 import { calculateVisibility } from "./ganit/calculateVisibility";
 import { getCssTle, getIssTle, getTle, searchSatellites } from "./getTle";
-import { formatTime } from "./helpers";
+import { formatTime } from "./helpers/utils";
 import { ObserverLocation, StateVector } from "./types";
 
 // Constants
@@ -39,7 +39,7 @@ async function main() {
   console.log("TIME NOW: ", formatTime(now));
   if (typeof issStateVector === "string") {
     console.error(
-      `Something went wrong while calculating state vector. err: ${issStateVector}`
+      `Something went wrong while calculating state vector. err: ${issStateVector}`,
     );
   } else {
     console.log("ISS State Vector:", issStateVector);
@@ -49,7 +49,7 @@ async function main() {
     isstle,
     now,
     new Date(now.getTime() + MINUTE * 5),
-    30
+    30,
   );
 
   console.log("\n\n Range: ", stateVectorRange);
@@ -57,7 +57,7 @@ async function main() {
   const visibilityInfo = calculateVisibility(
     issStateVector as StateVector,
     observerLocation,
-    now
+    now,
   );
 
   console.log("Current Time: ", formatTime(now));
