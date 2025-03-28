@@ -12,19 +12,21 @@ describe("#calculateVisibility", () => {
       throw new Error("No data found");
     }
 
-    for (let record of records) {
-      record.ISS.visibility.forEach((pass) => {
-        const { isObserverInDarkness: atStart } = sunCalculation(
-          record.observerLocation,
-          new Date(pass.startingTime),
-        );
-        expect(atStart).toBe(true);
-        const { isObserverInDarkness: atEnd } = sunCalculation(
-          record.observerLocation,
-          new Date(pass.endingTime),
-        );
-        expect(atEnd).toBe(true);
+    records.forEach((record) => {
+      record.satellites.forEach((satellite) => {
+        satellite.visibility.forEach((pass) => {
+          const { isObserverInDarkness: atStart } = sunCalculation(
+            record.observerLocation,
+            new Date(pass.startingTime),
+          );
+          expect(atStart).toBe(true);
+          const { isObserverInDarkness: atEnd } = sunCalculation(
+            record.observerLocation,
+            new Date(pass.endingTime),
+          );
+          expect(atEnd).toBe(true);
+        });
       });
-    }
+    });
   });
 });

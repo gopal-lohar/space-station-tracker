@@ -88,6 +88,5 @@ export interface VisibilitySampleRecord {
   recordDate: string;
   dataTill: string;
   observerLocation: ObserverLocation;
-  ISS: SatelliteData;
-  CSS: SatelliteData;
+  satellites: SatelliteData[];
 }
