@@ -1,4 +1,4 @@
-export function formatTime(date: Date): string {
+export function formatTime(date: Date, timezone: string = "UTC"): string {
   const istDate = new Date(date);
 
   // Format the date and time
@@ -10,8 +10,10 @@ export function formatTime(date: Date): string {
     minute: "2-digit",
     second: "2-digit",
     hour12: true,
-    timeZone: "UTC",
+    timeZone: timezone,
   };
 
-  return new Intl.DateTimeFormat("en-IN", options).format(istDate) + " UTC";
+  return (
+    new Intl.DateTimeFormat("en-IN", options).format(istDate) + " " + timezone
+  );
 }
