@@ -2,7 +2,7 @@ export const DATA_DIR = "./data";
 import fs from "fs/promises";
 
 export async function getDataFromDataDir<T>(
-  filename: string,
+  filename: string
 ): Promise<T | null> {
   const filePath = `${DATA_DIR}/${filename}`;
   try {

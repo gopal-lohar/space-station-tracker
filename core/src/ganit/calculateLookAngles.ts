@@ -3,7 +3,7 @@ import * as satellite from "satellite.js";
 
 function calculateLookAnglesInRadians(
   stateVector: StateVector,
-  observerLocation: ObserverLocation,
+  observerLocation: ObserverLocation
 ): satellite.LookAngles {
   const observerLocationGeodetic = {
     longitude: satellite.degreesToRadians(observerLocation.longitude),
@@ -15,10 +15,10 @@ function calculateLookAnglesInRadians(
   // IN RADIANS
   const satellitePositionGeodetic = {
     longitude: satellite.degreesToRadians(
-      stateVector.geodetic.position.longitude,
+      stateVector.geodetic.position.longitude
     ),
     latitude: satellite.degreesToRadians(
-      stateVector.geodetic.position.latitude,
+      stateVector.geodetic.position.latitude
     ),
     height: stateVector.geodetic.position.height,
   };
@@ -27,7 +27,7 @@ function calculateLookAnglesInRadians(
 
   const lookAngles = satellite.ecfToLookAngles(
     observerLocationGeodetic,
-    satelliteEcf,
+    satelliteEcf
   );
 
   return lookAngles;
@@ -42,7 +42,7 @@ function normalizeAzimuth(azimuth: number): number {
 
 export function calculateLookAngles(
   stateVector: StateVector,
-  observerLocation: ObserverLocation,
+  observerLocation: ObserverLocation
 ): {
   lookAnglesInDegrees: { azimuth: number; elevation: number };
   isSatelliteAboveHorizon: boolean;
@@ -50,7 +50,7 @@ export function calculateLookAngles(
 } {
   const lookAngles = calculateLookAnglesInRadians(
     stateVector,
-    observerLocation,
+    observerLocation
   );
   const lookAnglesInDegrees = {
     azimuth: normalizeAzimuth(lookAngles.azimuth) * (180 / Math.PI),

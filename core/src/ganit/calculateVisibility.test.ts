@@ -1,11 +1,11 @@
 import { TLE, VisibilitySampleRecord } from "../types";
 import { expect, describe, it } from "vitest";
 import { getDataFromDataDir } from "../helpers/filesystem";
-import { calculateLookAngles } from "./calculateLookAngles";
 import { calculateStateVector } from "./calculateStateVector";
+import { calculateVisibility } from "./calculateVisibility";
 
-describe("calculateLookAngles", () => {
-  it("should return true if the satellite is above the horizon for every visible pass", async () => {
+describe("#calculateVisibility", () => {
+  it("should return visible if iss is visible in sample data", async () => {
     let records = await getDataFromDataDir<VisibilitySampleRecord[]>(
       "sat_visibility_samples.json"
     );
@@ -26,9 +26,13 @@ describe("calculateLookAngles", () => {
             throw new Error("error calculating state vector");
           }
 
-          const { lookAnglesInDegrees, isSatelliteAboveHorizon } =
-            calculateLookAngles(stateVector, record.observerLocation);
-          expect(isSatelliteAboveHorizon).toBe(true);
+          const visibilityInfo = calculateVisibility(
+            stateVector,
+            record.observerLocation,
+            time
+          );
+
+          expect(visibilityInfo.isVisible).toEqual(true);
         });
       });
     });

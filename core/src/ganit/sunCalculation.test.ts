@@ -6,7 +6,7 @@ import { sunCalculation } from "./sunCalculation";
 describe("#calculateVisibility", () => {
   it("should return true for isObserverInDarkness if the Observer is in darkness for every visible passes of iss", async () => {
     let records = await getDataFromDataDir<VisibilitySampleRecord[]>(
-      "sat_visibility_samples.json",
+      "sat_visibility_samples.json"
     );
     if (!records) {
       throw new Error("No data found");
@@ -17,12 +17,12 @@ describe("#calculateVisibility", () => {
         satellite.visibility.forEach((pass) => {
           const { isObserverInDarkness: atStart } = sunCalculation(
             record.observerLocation,
-            new Date(pass.startingTime),
+            new Date(pass.startingTime)
           );
           expect(atStart).toBe(true);
           const { isObserverInDarkness: atEnd } = sunCalculation(
             record.observerLocation,
-            new Date(pass.endingTime),
+            new Date(pass.endingTime)
           );
           expect(atEnd).toBe(true);
         });

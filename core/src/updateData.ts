@@ -33,7 +33,7 @@ async function updateData(satellites: SatelliteData[]) {
   for (const satellite of satellites) {
     console.log("Fetching data for ", satellite.name);
     let { data: satelliteTle, error: tleError } = await getTle(
-      satellite.satelliteId,
+      satellite.satelliteId
     );
     if (!satelliteTle || tleError) {
       console.error("Failed to fetch TLE data");
@@ -104,14 +104,14 @@ async function check(fetchInterval: number) {
       name: "ISS",
       satelliteId: satelliteIds.iss,
       tle: ((await getDataFromDataDir<TLE[]>(
-        `norad-${satelliteIds.iss}.json`,
+        `norad-${satelliteIds.iss}.json`
       )) || []) as TLE[],
     },
     {
       name: "CSS",
       satelliteId: satelliteIds.css,
       tle: ((await getDataFromDataDir<TLE[]>(
-        `norad-${satelliteIds.css}.json`,
+        `norad-${satelliteIds.css}.json`
       )) || []) as TLE[],
     },
   ];

@@ -19,11 +19,11 @@ interface VisibilityInfo {
 export function calculateVisibility(
   stateVector: StateVector,
   observerLocation: ObserverLocation,
-  time: Date,
+  time: Date
 ): VisibilityInfo {
   const { isObserverInDarkness, sunElevationInDegrees } = sunCalculation(
     observerLocation,
-    time,
+    time
   );
   const { lookAnglesInDegrees, isSatelliteAboveHorizon, rangeSat } =
     calculateLookAngles(stateVector, observerLocation);
