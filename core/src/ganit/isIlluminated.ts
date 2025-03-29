@@ -1,103 +1,91 @@
-import { EciVec3 } from "satellite.js";
-import { StateVector } from "../types";
-
-export function isIssIlluminated(
-  stateVector: StateVector,
-  date: Date
-): boolean {
-  // Constants
-  const EARTH_RADIUS = 6371000; // Earth radius in meters
-
-  // Get the position of the ISS in ECI coordinates
-  const issPosition = stateVector.eci.position;
-
-  // Calculate the position of the Sun in ECI coordinates
-  const sunPosition = getSunPositionEci(date);
-
-  // Vector from Earth center to ISS
-  const earthToIss = {
-    x: issPosition.x,
-    y: issPosition.y,
-    z: issPosition.z,
-  };
-
-  // Vector from Earth center to Sun
-  const earthToSun = {
-    x: sunPosition.x,
-    y: sunPosition.y,
-    z: sunPosition.z,
-  };
-
-  // Normalize the Earth-to-Sun vector
-  const earthToSunMagnitude = Math.sqrt(
-    earthToSun.x * earthToSun.x +
-      earthToSun.y * earthToSun.y +
-      earthToSun.z * earthToSun.z
-  );
-
-  const earthToSunNormalized = {
-    x: earthToSun.x / earthToSunMagnitude,
-    y: earthToSun.y / earthToSunMagnitude,
-    z: earthToSun.z / earthToSunMagnitude,
-  };
-
-  // Calculate the dot product between the Earth-to-ISS vector and the Earth-to-Sun vector
-  const dotProduct =
-    earthToIss.x * earthToSunNormalized.x +
-    earthToIss.y * earthToSunNormalized.y +
-    earthToIss.z * earthToSunNormalized.z;
-
-  // Project the Earth-to-ISS vector onto the Earth-to-Sun vector
-  const projection = {
-    x: earthToSunNormalized.x * dotProduct,
-    y: earthToSunNormalized.y * dotProduct,
-    z: earthToSunNormalized.z * dotProduct,
-  };
-
-  // Calculate the perpendicular distance from the ISS to the Earth-Sun line
-  const perpendicularDistance = Math.sqrt(
-    Math.pow(earthToIss.x - projection.x, 2) +
-      Math.pow(earthToIss.y - projection.y, 2) +
-      Math.pow(earthToIss.z - projection.z, 2)
-  );
-
-  // Check if the dot product is negative (ISS is on the opposite side of Earth from the Sun)
-  // and if the perpendicular distance is less than Earth's radius
-  const isInShadow = dotProduct < 0 && perpendicularDistance < EARTH_RADIUS;
-
-  // The ISS is illuminated if it's not in Earth's shadow
-  return !isInShadow;
+// Assume ECI vector is defined as follows:
+export interface EciVec3 {
+  x: number;
+  y: number;
+  z: number;
 }
 
-function getSunPositionEci(date: Date): EciVec3<number> {
-  // Calculate the number of days since J2000 epoch (January 1, 2000, 12:00 UTC)
-  const j2000 = new Date("2000-01-01T12:00:00Z");
-  const daysSinceJ2000 =
-    (date.getTime() - j2000.getTime()) / (1000 * 60 * 60 * 24);
+export interface StateVector {
+  geodetic: {
+    position: {
+      latitude: number;
+      longitude: number;
+      height: number;
+    };
+    velocity: number; // in m/s
+  };
+  eci: {
+    position: EciVec3;
+    velocity: EciVec3;
+  };
+}
 
-  // Calculate the mean anomaly of the Sun (in radians)
-  const meanAnomalySun = (0.9856474 * daysSinceJ2000 * Math.PI) / 180;
+function dot(v1: EciVec3, v2: EciVec3): number {
+  return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
 
-  // Calculate the Sun's ecliptic longitude (in radians)
-  const eclipticLongitudeSun =
-    ((280.46 + 0.9856474 * daysSinceJ2000) * Math.PI) / 180;
+function norm(v: EciVec3): number {
+  return Math.sqrt(dot(v, v));
+}
 
-  // Calculate the distance from Earth to Sun (in meters)
-  const AU = 149597870700; // 1 Astronomical Unit in meters
-  const distanceSun = (1.00014 - 0.01671 * Math.cos(meanAnomalySun)) * AU;
+function subtract(v1: EciVec3, v2: EciVec3): EciVec3 {
+  return { x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z };
+}
 
-  // Calculate the Sun position in ecliptic coordinates
-  const xEcliptic = distanceSun * Math.cos(eclipticLongitudeSun);
-  const yEcliptic = distanceSun * Math.sin(eclipticLongitudeSun);
-  const zEcliptic = 0; // Sun is always on the ecliptic plane
+// --- Compute the Sun's position in ECI coordinates ---
+// This simple approximation is sufficient for our illumination test. (ig)
+function getSunEciPosition(date: Date): EciVec3 {
+  const rad = Math.PI / 180;
+  const J2000 = Date.UTC(2000, 0, 1, 12, 0, 0);
+  const daysSinceJ2000 = (date.getTime() - J2000) / 86400000;
 
-  // Convert to ECI (we're simplifying here by assuming the ecliptic is aligned with ECI)
-  // For more precision, you'd need to account for obliquity of the ecliptic
-  const obliquity = (23.439 * Math.PI) / 180; // Earth's axial tilt
+  // Mean anomaly of the Sun (in degrees)
+  const M = (357.5291 + 0.98560028 * daysSinceJ2000) % 360;
+  // Mean longitude corrected for the Sun's perihelion (approximation)
+  const L = (M + 102.9372 + 180) % 360;
+  const Lrad = L * rad;
+
+  // Obliquity of the ecliptic
+  const obliquity = 23.4397 * rad;
+  // Approximate distance from Earth to Sun in km (~1 AU)
+  const sunDistance = 149597870.7;
 
   return {
-    x: xEcliptic,
-    y: yEcliptic * Math.cos(obliquity) - zEcliptic * Math.sin(obliquity),
-    z: yEcliptic * Math.sin(obliquity) + zEcliptic * Math.cos(obliquity),
+    x: sunDistance * Math.cos(Lrad),
+    y: sunDistance * Math.cos(obliquity) * Math.sin(Lrad),
+    z: sunDistance * Math.sin(obliquity) * Math.sin(Lrad),
   };
+}
+
+// --- Main function to determine if the satellite is illuminated ---
+// Based on the geometry described in the Celestrak column:
+// The satellite is in full shadow (umbra) if the angular separation
+// between the satellite and the Sun (as seen from Earth's center)
+// is less than (Earth's angular radius from the satellite - Sun's angular radius).
+export function isIssIlluminated(state: StateVector, date: Date): boolean {
+  // Constants (in kilometers)
+  const earthRadius = 6378.137; // Mean Earth radius
+  const sunRadius = 696000; // Sun's radius
+
+  // Satellite's ECI position and its magnitude
+  const satPos = state.eci.position;
+  const satDist = norm(satPos);
+
+  // Compute Sun's ECI position and its magnitude
+  const sunPos = getSunEciPosition(date);
+  const sunDist = norm(sunPos);
+
+  // Angular separation (theta) between satellite and Sun as seen from Earth's center
+  const cosTheta = dot(satPos, sunPos) / (satDist * sunDist);
+  const theta = Math.acos(Math.min(Math.max(cosTheta, -1), 1)); // Clamp for safety
+
+  // Earth's angular radius as seen from the satellite
+  const earthAngularRadius = Math.asin(earthRadius / satDist);
+
+  // Sun's angular radius as seen from Earth (satDist << sunDist, so similar for satellite)
+  const sunAngularRadius = Math.asin(sunRadius / sunDist);
+
+  // If theta is less than (earthAngularRadius - sunAngularRadius), then the satellite is fully in the umbra.
+  // Otherwise, some portion of the Sun is visible.
+  return theta >= earthAngularRadius - sunAngularRadius;
 }
