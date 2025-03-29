@@ -9,6 +9,7 @@ import { formatTime } from "./helpers/utils";
 import {
   ObserverLocation,
   StateVector,
+  TLE,
   Visibility,
   VisibilitySampleRecord,
 } from "./types";
@@ -45,65 +46,49 @@ async function main() {
     "sat_visibility_samples.json"
   );
   if (!records) {
-    throw new Error("No data found");
+    console.error("No Sample data found");
+    return;
   }
+
+  // TODO: these calculations suggests that
+  // 1. the azimut is comming negative, some problem there
+  // 2. the illumination algorithm is not quite right, it is overshooting
+
+  const delta = SECOND * 30;
   const record = records[0];
+  const sat = record.satellites[0];
   const observerLocation = record.observerLocation;
-  const now = new Date(record.recordDate);
+  const startTime = new Date(record.recordDate);
+  let currentTime = startTime;
+  const endTime = new Date(record.dataTill);
+  const passes: Visibility[] = [];
 
-  const stateVectorRange = calculateStateVectorRange(
-    isstle,
-    now,
-    new Date(now.getTime() + DAY * 11),
-    30
-  );
-
-  console.log("\n\n Range: ", stateVectorRange.stateVectors.length);
-
-  // calculate passes
-  let visible = false;
-  let passes: Visibility[] = [];
-  let currentPass: Visibility | null = null;
-
-  stateVectorRange.stateVectors.forEach((vec) => {
-    let visibility = calculateVisibility(
-      vec.stateVector,
-      observerLocation,
-      vec.time
-    );
-    if (!visible && visibility.isVisible) {
-      // when the sat starts being visible
-      visible = true;
-      currentPass = {
-        startingTime: vec.time.toISOString(),
-        endingTime: vec.time.toISOString(),
-        startElevation: visibility.lookAnglesInDegrees.elevation,
-        endElevation: visibility.lookAnglesInDegrees.elevation,
-        maxElevation: visibility.lookAnglesInDegrees.elevation,
-        startDirection: visibility.lookAnglesInDegrees.azimuth,
-        endDirection: visibility.lookAnglesInDegrees.azimuth,
-        magnitude: NaN,
-      };
-    } else if (visible && visibility.isVisible) {
-      // when the sat starts being visible
-      if (currentPass) {
-        currentPass.maxElevation = Math.max(
-          currentPass.maxElevation,
-          visibility.lookAnglesInDegrees.elevation
+  // loop over the time with 30 second interval, if anywhere the sat is visible, get 30 seconds behind then loop second by second until it vanishes, then continue the 30 second interval
+  while (currentTime < endTime) {
+    const stateVector = calculateStateVector(currentTime, sat.tle);
+    if (typeof stateVector !== "string") {
+      const currentVisibility = calculateVisibility(
+        stateVector,
+        observerLocation,
+        currentTime
+      );
+      if (currentVisibility.isVisible) {
+        const pass = calculatePass(
+          new Date(currentTime.getTime() - delta),
+          sat.tle,
+          observerLocation
         );
+        if (typeof pass === "string") {
+          console.error("Error calculating pass:", pass);
+        } else {
+          passes.push(pass.pass);
+          currentTime = pass.endTime;
+          continue;
+        }
       }
-    } else if (visible && !visibility.isVisible) {
-      // when the sat stops being visible
-      if (currentPass) {
-        currentPass.endingTime = vec.time.toISOString();
-        currentPass.endElevation = visibility.lookAnglesInDegrees.elevation;
-        currentPass.endDirection = visibility.lookAnglesInDegrees.azimuth;
-        passes.push(currentPass);
-      }
-      visible = false;
-      currentPass = null;
     }
-  });
+    currentTime = new Date(currentTime.getTime() + delta);
+  }
 
   console.log("Calculated passes");
   passes.forEach((viz) => {
@@ -113,7 +98,7 @@ async function main() {
     console.log(viz);
   });
 
-  console.log("\n\nPasses");
+  console.log("\n\nSample Passes");
 
   record.satellites[0].visibility.forEach((sample) => {
     console.log(
@@ -123,6 +108,71 @@ async function main() {
 
   console.log("\noperation completed");
   console.timeEnd("operation");
+}
+
+function calculatePass(
+  initialTime: Date,
+  tle: TLE,
+  observerLocation: ObserverLocation
+):
+  | {
+      endTime: Date;
+      pass: Visibility;
+    }
+  | string {
+  let currentTime = initialTime;
+
+  let currentVisibility = null;
+
+  // skip time when the sat is not visible
+  while (!currentVisibility?.isVisible) {
+    const stateVector = calculateStateVector(currentTime, tle);
+    if (typeof stateVector === "string") {
+      return stateVector;
+    }
+    currentVisibility = calculateVisibility(
+      stateVector,
+      observerLocation,
+      currentTime
+    );
+
+    currentTime = new Date(currentTime.getTime() + SECOND);
+  }
+
+  // for the time when the sat is visible
+  const currentPass = {
+    startingTime: currentTime.toISOString(),
+    endingTime: currentTime.toISOString(),
+    startElevation: currentVisibility.lookAnglesInDegrees.elevation,
+    endElevation: currentVisibility.lookAnglesInDegrees.elevation,
+    maxElevation: currentVisibility.lookAnglesInDegrees.elevation,
+    startDirection: currentVisibility.lookAnglesInDegrees.azimuth,
+    endDirection: currentVisibility.lookAnglesInDegrees.azimuth,
+    magnitude: 0,
+  };
+
+  while (currentVisibility.isVisible) {
+    const stateVector = calculateStateVector(currentTime, tle);
+    if (typeof stateVector === "string") {
+      return stateVector;
+    }
+    currentVisibility = calculateVisibility(
+      stateVector,
+      observerLocation,
+      currentTime
+    );
+    currentPass.maxElevation = Math.max(
+      currentPass.maxElevation,
+      currentVisibility.lookAnglesInDegrees.elevation
+    );
+    currentTime = new Date(currentTime.getTime() + SECOND);
+  }
+
+  currentPass.endingTime = currentTime.toISOString();
+  currentPass.endElevation = currentVisibility.lookAnglesInDegrees.elevation;
+  currentPass.endDirection = currentVisibility.lookAnglesInDegrees.azimuth;
+
+  return { endTime: currentTime, pass: currentPass };
 }
 
 main();
