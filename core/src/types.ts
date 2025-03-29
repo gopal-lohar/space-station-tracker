@@ -68,7 +68,7 @@ export interface ObserverLocation {
 }
 
 // visibility samples for testing
-interface Visibility {
+export interface Visibility {
   startingTime: string;
   endingTime: string;
   startElevation: number;

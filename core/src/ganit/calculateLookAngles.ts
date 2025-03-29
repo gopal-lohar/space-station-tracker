@@ -59,7 +59,7 @@ export function calculateLookAngles(
 
   return {
     lookAnglesInDegrees,
-    isSatelliteAboveHorizon: lookAngles.elevation > 0,
+    isSatelliteAboveHorizon: lookAnglesInDegrees.elevation > 10,
     rangeSat: lookAngles.rangeSat, // in kilometers
   };
 }
