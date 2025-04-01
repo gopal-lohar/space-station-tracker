@@ -53,7 +53,7 @@ export function calculateLookAngles(
     observerLocation
   );
   const lookAnglesInDegrees = {
-    azimuth: normalizeAzimuth(lookAngles.azimuth) * (180 / Math.PI),
+    azimuth: lookAngles.azimuth * (180 / Math.PI),
     elevation: lookAngles.elevation * (180 / Math.PI),
   };
 

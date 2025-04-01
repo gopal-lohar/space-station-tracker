@@ -51,8 +51,7 @@ async function main() {
   }
 
   // TODO: these calculations suggests that
-  // 1. the azimut is comming negative, some problem there
-  // 2. the illumination algorithm is not quite right, it is overshooting
+  // the illumination algorithm is not quite right, it is overshooting
 
   const delta = SECOND * 30;
   const record = records[0];
