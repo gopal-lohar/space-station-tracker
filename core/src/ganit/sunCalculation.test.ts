@@ -1,4 +1,4 @@
-import { TLE, VisibilitySampleRecord } from "../types";
+import { Tle, VisibilitySampleRecord } from "../types";
 import { expect, describe, it } from "vitest";
 import { getDataFromDataDir } from "../helpers/filesystem";
 import { sunCalculation } from "./sunCalculation";

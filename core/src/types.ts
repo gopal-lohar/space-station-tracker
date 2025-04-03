@@ -1,7 +1,7 @@
 import { EciVec3 } from "satellite.js";
 
 // Fetching data from api
-export interface TLE {
+export interface Tle {
   satelliteId: number;
   name: string;
   date: string; // ISO 8601 format
@@ -11,7 +11,7 @@ export interface TLE {
 
 export interface TLESearchResponse {
   totalItems: number;
-  member: TLE[];
+  member: Tle[];
   parameters: {
     search: string;
     sort: string;
@@ -80,7 +80,7 @@ export interface Visibility {
 }
 
 interface SatelliteData {
-  tle: TLE;
+  tle: Tle;
   visibility: Visibility[];
 }
 

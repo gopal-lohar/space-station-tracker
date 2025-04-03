@@ -1,6 +1,6 @@
 import { calculateStateVector } from "./calculateStateVector";
 import { calculateVisibility } from "./calculateVisibility";
-import { ObserverLocation, TLE, Visibility } from "../types";
+import { ObserverLocation, Tle, Visibility } from "../types";
 import { SECOND } from "../helpers/utils";
 
 export function computePasses({
@@ -13,7 +13,7 @@ export function computePasses({
   startTime: Date;
   endTime: Date;
   observerLocation: ObserverLocation;
-  tle: TLE;
+  tle: Tle;
   delta: number;
 }): Visibility[] {
   let currentTime = startTime;
@@ -52,7 +52,7 @@ export function computePasses({
 
 function calculatePass(
   initialTime: Date,
-  tle: TLE,
+  tle: Tle,
   observerLocation: ObserverLocation
 ):
   | {

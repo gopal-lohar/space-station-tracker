@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiResponse, TLE, TLESearchResponse } from "./types";
+import { ApiResponse, Tle, TLESearchResponse } from "./types";
 
 const API_URL = "http://tle.ivanstanojevic.me/api/tle";
 
@@ -19,7 +19,7 @@ async function fetchData<T>(url: string): Promise<ApiResponse<T>> {
   };
 }
 
-export async function getTle(noradId: number): Promise<ApiResponse<TLE>> {
+export async function getTle(noradId: number): Promise<ApiResponse<Tle>> {
   return await fetchData(`${API_URL}/${noradId}`);
 }
 
@@ -36,7 +36,7 @@ export const satelliteIds = {
 
 // temporary functions to avoid API calling
 // TLE for International Space Station
-export async function getIssTle(): Promise<ApiResponse<TLE>> {
+export async function getIssTle(): Promise<ApiResponse<Tle>> {
   return {
     error: null,
     data: {
@@ -52,7 +52,7 @@ export async function getIssTle(): Promise<ApiResponse<TLE>> {
 }
 
 // TLE for China Space Station
-export async function getCssTle(): Promise<ApiResponse<TLE>> {
+export async function getCssTle(): Promise<ApiResponse<Tle>> {
   return {
     error: null,
     data: {

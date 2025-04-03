@@ -6,7 +6,7 @@
 import fs from "fs/promises";
 import { getTle, satelliteIds } from "./getTle";
 import { formatTime } from "./helpers/utils";
-import { TLE } from "./types";
+import { Tle } from "./types";
 import {
   DATA_DIR,
   ensureDataDirExists,
@@ -16,7 +16,7 @@ import {
 interface SatelliteData {
   name: string;
   satelliteId: number;
-  tle: TLE[];
+  tle: Tle[];
 }
 
 async function updateTleFile(satellite: SatelliteData[]) {
@@ -81,6 +81,7 @@ function formatMs(diffMs: number) {
 function getUpdateStats(satellites: SatelliteData[]) {
   satellites.forEach((satellite) => {
     console.log("\n For ", satellite.name);
+    let updateIntervals: Array<number> = [];
     let updateInterval = 0;
     let lastUpdateTime: Date | null = null;
     satellite.tle.forEach((tle) => {
@@ -89,10 +90,17 @@ function getUpdateStats(satellites: SatelliteData[]) {
       } else {
         updateInterval =
           lastUpdateTime.getTime() - new Date(tle.date).getTime();
+        updateIntervals.push(updateInterval);
         console.log("Update Interval: ", formatMs(updateInterval));
         lastUpdateTime = new Date(tle.date);
       }
     });
+    let averageUpdateInterval =
+      updateIntervals.reduce((sum, val) => sum + val, 0) /
+      updateIntervals.length;
+    console.log(
+      `Average Update Interval for ${satellite.name} is ${formatMs(averageUpdateInterval)}`
+    );
   });
 }
 
@@ -103,16 +111,16 @@ async function check(fetchInterval: number) {
     {
       name: "ISS",
       satelliteId: satelliteIds.iss,
-      tle: ((await getDataFromDataDir<TLE[]>(
+      tle: ((await getDataFromDataDir<Tle[]>(
         `norad-${satelliteIds.iss}.json`
-      )) || []) as TLE[],
+      )) || []) as Tle[],
     },
     {
       name: "CSS",
       satelliteId: satelliteIds.css,
-      tle: ((await getDataFromDataDir<TLE[]>(
+      tle: ((await getDataFromDataDir<Tle[]>(
         `norad-${satelliteIds.css}.json`
-      )) || []) as TLE[],
+      )) || []) as Tle[],
     },
   ];
 

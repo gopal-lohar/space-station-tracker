@@ -17,12 +17,17 @@ if (result.error) {
   );
 }
 
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+
 export const config = {
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   },
   api: {
     tleUrl: process.env.TLE_API_URL || "http://tle.ivanstanojevic.me/api/tle",
+    cacheAgeInMs: 12 * HOUR,
   },
   noradIds: {
     iss: 25544,

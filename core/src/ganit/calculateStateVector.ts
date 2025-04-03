@@ -1,9 +1,9 @@
 import * as satellite from "satellite.js";
-import { StateVector, StateVectorRange, TLE } from "../types";
+import { StateVector, StateVectorRange, Tle } from "../types";
 
 export function calculateStateVector(
   time: Date,
-  tle: TLE
+  tle: Tle
 ): StateVector | string {
   const satrec = satellite.twoline2satrec(tle.line1, tle.line2);
   // Get position in Earth-Centered Inertial (ECI) coordinates
@@ -54,7 +54,7 @@ export function calculateStateVector(
 }
 
 export function calculateStateVectorRange(
-  tle: TLE,
+  tle: Tle,
   startTime: Date,
   endTime: Date,
   stepSeconds: number = 60
