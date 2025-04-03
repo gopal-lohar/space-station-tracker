@@ -26,7 +26,7 @@ export const config = {
     port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   },
   api: {
-    tleUrl: process.env.TLE_API_URL || "http://tle.ivanstanojevic.me/api/tle",
+    tleUrl: process.env.TLE_API_URL || "https://tle.ivanstanojevic.me/api/tle",
     cacheAgeInMs: 12 * HOUR,
   },
   noradIds: {

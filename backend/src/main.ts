@@ -3,6 +3,7 @@ import { config } from "./config/env";
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { computePasses, getIssTle } from "space-station-tracker-core";
+import { tleManager } from "./services/TleManager";
 
 // Define interfaces
 interface SSPosition {
@@ -88,7 +89,17 @@ app.get("/", function (req: Request, res: Response) {
   );
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+async function main() {
+  let error = await tleManager.updateTLEData();
+  if (error) {
+    console.error("Error updating TLE data:", error);
+    return;
+  }
+
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+main();
