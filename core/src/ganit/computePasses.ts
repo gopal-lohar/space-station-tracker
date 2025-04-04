@@ -20,7 +20,7 @@ export function computePasses({
 
   const passes: Visibility[] = [];
 
-  // loop over the time with 30 second as interval, if anywhere the sat is visible, get 30 seconds behind then loop second by second until it vanishes, then continue the 30 second interval
+  // loop over the time with delta millisecond as interval, if anywhere the sat is visible, get delta milliseconds behind then loop second by second until it vanishes, then continue the delta millisecond interval
   while (currentTime < endTime) {
     const stateVector = calculateStateVector(currentTime, tle);
     if (typeof stateVector !== "string") {

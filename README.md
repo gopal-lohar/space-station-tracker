@@ -95,11 +95,11 @@ npm run update-data
 - [x] Look Angle Calculation
 - [x] Sun Calculation and Testing
 - [x] Look Angle cacluation testing
-- [ ] Is Illuminated calculation
-- [ ] Is Illuminated calculation testing
-- [ ] Complete visibility prediction algorithm
-- [ ] visibility prediction testing
-- [ ] Write Tests and actually verify the working against known ISS passes
+- [ ] Is Illuminated calculation ( although it is done and works there is still some problem in it which is causing some wrong outputs)
+- [x] Is Illuminated calculation testing
+- [x] Complete visibility prediction algorithm
+- [x] visibility prediction testing
+- [x] Write Tests and actually verify the working against known ISS passes
 - [ ] Backend API development
 - [ ] Frontend application development
 - [ ] User notification system

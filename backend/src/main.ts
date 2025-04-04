@@ -60,7 +60,12 @@ app.get("/api/passes", async (req, res) => {
     return;
   }
 
-  const tle = (await getIssTle()).data;
+  // by default iss
+  const { data: tle, error } = await tleManager.getTle(config.noradIds.iss);
+  if (!tle || error) {
+    res.status(500).json({ error: "Error fetching TLE data" });
+    return;
+  }
 
   let passes = [] as Pass[];
 
@@ -68,8 +73,8 @@ app.get("/api/passes", async (req, res) => {
     passes = computePasses({
       delta: 1000 * 30,
       observerLocation: { latitude, longitude, elevation: 0 },
-      startTime: new Date(Date.now()),
-      endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      startTime: new Date(new Date().toDateString()), // today at midnight
+      endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days from now
       tle,
     });
   }
@@ -82,7 +87,6 @@ app.get("/api/passes", async (req, res) => {
   res.json(passesData);
 });
 
-// Root route
 app.get("/", function (req: Request, res: Response) {
   res.send(
     "Space Station API - Use /api/ss-position or /api/passes?latitude=X&longitude=Y",
