@@ -2,7 +2,7 @@ import { config } from "./config/env";
 
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { computePasses, getIssTle } from "space-station-tracker-core";
+import { computePasses, getSunTimes } from "space-station-tracker-core";
 import { tleManager } from "./services/TleManager";
 
 // Define interfaces
