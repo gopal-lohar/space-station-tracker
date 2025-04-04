@@ -9,8 +9,6 @@ const ssPositionQuery = {
       time: string;
       latitude: number;
       longitude: number;
-      sunrise: string;
-      sunset: string;
     }>(`${tempURL}/api/ss-position`);
     return data;
   },

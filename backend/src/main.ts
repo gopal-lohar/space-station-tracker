@@ -2,7 +2,11 @@ import { config } from "./config/env";
 
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { computePasses, getSunTimes } from "space-station-tracker-core";
+import {
+  calculateStateVector,
+  computePasses,
+  getSunTimes,
+} from "space-station-tracker-core";
 import { tleManager } from "./services/TleManager";
 
 // Define interfaces
@@ -10,8 +14,6 @@ interface SSPosition {
   time: number;
   latitude: number;
   longitude: number;
-  sunrise: Date;
-  sunset: Date;
 }
 
 interface Pass {
@@ -36,13 +38,24 @@ app.use(cors());
 
 const PORT = config.server.port;
 
-app.get("/api/ss-position", (req, res) => {
+app.get("/api/ss-position", async (req, res) => {
+  const { data: tle, error } = await tleManager.getTle(config.noradIds.iss);
+  if (!tle || error) {
+    res.status(500).json({ error: "Error fetching TLE data" });
+    return;
+  }
+
+  const stateVectors = calculateStateVector(new Date(), tle);
+
+  if (typeof stateVectors !== "object") {
+    res.status(500).json({ error: "Error calculating state vectors" });
+    return;
+  }
+
   const ssPosition: SSPosition = {
     time: Date.now(),
-    latitude: 0,
-    longitude: 0,
-    sunrise: new Date(Date.now() + 10000),
-    sunset: new Date(Date.now() + 100),
+    latitude: stateVectors.geodetic.position.latitude,
+    longitude: stateVectors.geodetic.position.longitude,
   };
 
   res.json(ssPosition);

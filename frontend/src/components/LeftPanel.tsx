@@ -15,16 +15,10 @@ export function LeftPanel() {
       <WorldMap />
       {ssPositionQuery.data && (
         <div className="flex justify-between p-2">
-          <div>
-            Sunrise: {formatTime(new Date(ssPositionQuery.data.sunrise))}
-          </div>
-          <div>Sunset: {formatTime(new Date(ssPositionQuery.data.sunset))}</div>
+          <div>Latitude: {ssPositionQuery.data.latitude}</div>
+          <div>Sunset: {ssPositionQuery.data.longitude}</div>
         </div>
       )}
     </div>
   );
-}
-
-function formatTime(time: Date) {
-  return time.toLocaleTimeString();
 }
