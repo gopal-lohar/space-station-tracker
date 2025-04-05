@@ -56,15 +56,14 @@ The project consists of three main components:
 
 ### APIs
 - [NASA's TLE API](http://tle.ivanstanojevic.me/api/tle) - Provides up-to-date TLE data for the ISS
-- [Additional NASA APIs](https://api.nasa.gov/) - Other potential data sources for the project
+- [Additional NASA APIs](https://api.nasa.gov/) - Other potential data sources for the project (only the above api is used in this project in the current state)
 
 ## Current Status
 
 The project is in development, with the core calculation module as the primary focus. Current work includes:
 - Creating a data refresh strategy based on TLE update frequency
 - Figure out how often the TLE api updates
-- Implementing orbital propagation algorithms
-- Building the cli app for getting ISS passes
+- Implementing orbital propagation algorithms (not the SGP4 but using SGP4 propagation of whether the space station is visible or not)
 - Building test fixtures for validation against known ISS passes
 
 ## Installation & Development
@@ -84,9 +83,6 @@ npm install
 
 # Run development version
 npm run dev
-
-# Update TLE data
-npm run update-data
 ```
 
 ## Roadmap
@@ -104,6 +100,13 @@ npm run update-data
 - [ ] Frontend application development
 - [ ] User notification system
 - [ ] Sky map visualization (MAYBE)
+- [ ] some day the entire app can be converted into a react app with a web assembly worker thread
+
+## Eventually...
+
+the current setup is somewhat upgradable using turborepo and can be extended to support more features.
+
+but what is an interesting idea for the future? Maybe we can move all the computational logic to the frontend itself and do it using wasm and web workers. although not strictly required but it will be a good idea to use a better programming language for the computations, something that is fast, efficient, typesafe and better suited - Rust. Alongside changing programming language, the computations can themselves be optimized by plotting the graphs of the parameters and then using things like golden section search or maybe, just may be Newton's method as described in this article titled [Sunrise . . . Sunset](https://celestrak.org/columns/v03n04/).
 
 ## License
 
