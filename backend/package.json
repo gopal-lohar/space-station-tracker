@@ -5,9 +5,10 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
+    "dev": "ts-node src/main.ts",
+    "dev:watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.js",
-    "dev": "ts-node src/main.ts"
+    "start": "node dist/main.js"
   },
   "keywords": [],
   "author": "",

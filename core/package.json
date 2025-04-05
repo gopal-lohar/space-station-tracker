@@ -5,13 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "dev": "ts-node src/index.ts",
+    "dev:watch": "tsc --watch",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "dev:watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "update-data": "ts-node src/updateData.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "update-data": "ts-node src/updateData.ts",
     "test": "vitest"
   },
   "keywords": [],

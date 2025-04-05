@@ -11,10 +11,7 @@ const result = dotenv.config({
 });
 
 if (result.error) {
-  console.error(
-    "Although .env is not required, Error loading .env file:",
-    result.error,
-  );
+  console.log(".env not found so falling back to default values");
 }
 
 const SECOND = 1000;

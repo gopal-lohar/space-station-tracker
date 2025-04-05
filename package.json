@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "concurrently -n \"CORE,BACKEND,FRONTEND\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold\" \"npm run dev -w core\" \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:watch": "concurrently -n \"CORE,BACKEND,FRONTEND\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold\" \"npm run dev:watch -w core\" \"npm run dev:watch -w backend\" \"npm run dev:watch -w frontend\"",
+    "build": "concurrently -n \"CORE,BACKEND,FRONTEND\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold\" \"npm run build -w core\" \"npm run build -w backend\" \"npm run build -w frontend\"",
+    "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"bgGreen.bold,bgMagenta.bold\" \"npm run start -w backend\" \"npm run start -w frontend\"",
+    "dev:core": "npm run dev -w core",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend"
+  },
+  "workspaces": [
+    "core",
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
