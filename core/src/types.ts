@@ -68,7 +68,7 @@ export interface ObserverLocation {
 }
 
 // visibility samples for testing
-export interface Visibility {
+export interface Pass {
   startingTime: string;
   endingTime: string;
   startElevation: number;
@@ -81,7 +81,7 @@ export interface Visibility {
 
 interface SatelliteData {
   tle: Tle;
-  visibility: Visibility[];
+  visibility: Pass[];
 }
 
 export interface VisibilitySampleRecord {

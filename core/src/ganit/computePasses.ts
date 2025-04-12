@@ -1,6 +1,6 @@
 import { calculateStateVector } from "./calculateStateVector";
 import { calculateVisibility } from "./calculateVisibility";
-import { ObserverLocation, Tle, Visibility } from "../types";
+import { ObserverLocation, Tle, Pass } from "../types";
 import { SECOND } from "../helpers/utils";
 
 export function computePasses({
@@ -15,10 +15,10 @@ export function computePasses({
   observerLocation: ObserverLocation;
   tle: Tle;
   delta: number;
-}): Visibility[] {
+}): Pass[] {
   let currentTime = startTime;
 
-  const passes: Visibility[] = [];
+  const passes: Pass[] = [];
 
   // loop over the time with delta millisecond as interval, if anywhere the sat is visible, get delta milliseconds behind then loop second by second until it vanishes, then continue the delta millisecond interval
   while (currentTime < endTime) {
@@ -57,7 +57,7 @@ function calculatePass(
 ):
   | {
       endTime: Date;
-      pass: Visibility;
+      pass: Pass;
     }
   | string {
   let currentTime = initialTime;
