@@ -1,10 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import WorldMap from "./WorldMap";
-import { queries } from "../queries";
 
 export function LeftPanel() {
-  const ssPositionQuery = useQuery(queries.ssPositionQuery);
-
   return (
     <div className="">
       {/* <div
@@ -13,12 +9,11 @@ export function LeftPanel() {
       ></div> */}
 
       <WorldMap />
-      {ssPositionQuery.data && (
-        <div className="flex justify-between p-2">
-          <div>Latitude: {ssPositionQuery.data.latitude}</div>
-          <div>Sunset: {ssPositionQuery.data.longitude}</div>
-        </div>
-      )}
+
+      <div className="flex justify-between p-2">
+        <div>Latitude: TBD</div>
+        <div>Sunset: TBD</div>
+      </div>
     </div>
   );
 }

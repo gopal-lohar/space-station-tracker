@@ -17,6 +17,7 @@
     "lucide-react": "^0.485.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "space-station-tracker-core": "file:../core",
     "tailwindcss": "^4.0.17"
   },
   "devDependencies": {

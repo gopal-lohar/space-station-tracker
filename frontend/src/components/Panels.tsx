@@ -128,17 +128,18 @@ function Passes({
 }: {
   location: { latitude: number; longitude: number };
 }) {
-  const passesQuery = useQuery(queries.passesQuery(location));
+  const ssName = "iss";
+  const passesQuery = useQuery(queries.passesQuery(location, ssName));
   return passesQuery.error ? (
     <div className="col-span-2">Error Loading Data</div>
   ) : passesQuery.isLoading ? (
     <div className="col-span-2">Loading...</div>
   ) : !passesQuery.data ? (
     <div className="col-span-2">Something Went Wrong</div>
-  ) : passesQuery.data.passes.length === 0 ? (
+  ) : passesQuery.data.length === 0 ? (
     <div className="col-span-2">No Passes</div>
   ) : (
-    <TheTwoPanels passes={passesQuery.data.passes} />
+    <TheTwoPanels passes={passesQuery.data} />
   );
 }
 

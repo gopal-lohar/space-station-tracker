@@ -1,42 +1,26 @@
 import axios from "axios";
+import { Pass } from "space-station-tracker-core";
 
 const tempURL = "http://localhost:3000";
 
-const ssPositionQuery = {
-  queryKey: ["ssPosition"],
-  queryFn: async () => {
-    const { data } = await axios.get<{
-      time: string;
-      latitude: number;
-      longitude: number;
-    }>(`${tempURL}/api/ss-position`);
-    return data;
+const passesQuery = (
+  {
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
   },
-};
-
-export interface Pass {
-  startingTime: string;
-  endingTime: string;
-  startElevation: number;
-  maxElevation: number;
-  endElevation: number;
-  startDirection: number;
-  endDirection: number;
-  magnitude: number;
-}
-
-const passesQuery = ({
-  latitude,
-  longitude,
-}: {
-  latitude: number;
-  longitude: number;
-}) => {
+  ssName: string,
+) => {
   return {
-    queryKey: ["passes", latitude, longitude],
+    queryKey: ["passes", ssName, latitude, longitude],
     queryFn: async () => {
-      const { data } = await axios.get<{ time: string; passes: Pass[] }>(
-        `${tempURL}/api/passes?latitude=${latitude}&longitude=${longitude}`,
+      console.log(
+        `${tempURL}/api/passes/${ssName}?latitude=${latitude}&longitude=${longitude}`,
+      );
+      const { data } = await axios.get<Pass[]>(
+        `${tempURL}/api/passes/${ssName}?latitude=${latitude}&longitude=${longitude}`,
       );
       return data;
     },
@@ -44,6 +28,5 @@ const passesQuery = ({
 };
 
 export const queries = {
-  ssPositionQuery,
   passesQuery,
 };
