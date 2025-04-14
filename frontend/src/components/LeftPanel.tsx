@@ -37,16 +37,40 @@ export function LeftPanel({ tle }: { tle: Tle }) {
   useEffect(() => {
     if (!tle) return;
 
-    const points: Position[] = [];
     const now = new Date();
+    const points: Position[] = [];
 
-    // Calculate positions for next 90 minutes (full orbit)
-    for (let i = 0; i <= 180; i += 5) {
-      const date = new Date(now.getTime() + i * 60 * 500);
+    // Calculate for 1.5 orbits to ensure continuity
+    for (let i = 0; i <= 135; i += 5) {
+      // 135 minutes = 1.5 orbits
+      const date = new Date(now.getTime() + i * 60 * 1000);
       points.push(calculatePosition(date));
     }
 
-    setOrbitPath(points);
+    // Split path segments at antimeridian crossings
+    const segments: Position[][] = [];
+    let currentSegment: Position[] = [];
+
+    points.forEach((point, index) => {
+      if (index === 0) {
+        currentSegment.push(point);
+        return;
+      }
+
+      const prevLon = points[index - 1].longitude;
+      const currLon = point.longitude;
+
+      // Detect antimeridian crossing
+      if (Math.abs(currLon - prevLon) > 180) {
+        segments.push([...currentSegment]);
+        currentSegment = [point];
+      } else {
+        currentSegment.push(point);
+      }
+    });
+
+    segments.push(currentSegment);
+    setOrbitPath(segments.flat());
   }, [tle, calculatePosition]);
 
   // Update current position
@@ -61,10 +85,14 @@ export function LeftPanel({ tle }: { tle: Tle }) {
   }, [tle, calculatePosition]);
 
   const projectToSVG = (lat: number, lon: number): [number, number] => {
-    const svgWidth = 5760; // SVG dimensions
-    const svgHeight = 2880; // SVG dimensions
+    const svgWidth = 5760;
+    const svgHeight = 2880;
 
-    const x = (lon + 180) * (svgWidth / 360);
+    // Normalize longitude to [-180, 180]
+    let normalizedLon = lon % 360;
+    normalizedLon = normalizedLon > 180 ? normalizedLon - 360 : normalizedLon;
+
+    const x = (normalizedLon + 180) * (svgWidth / 360);
     const y = (90 - lat) * (svgHeight / 180);
 
     return [x, y];
@@ -74,17 +102,34 @@ export function LeftPanel({ tle }: { tle: Tle }) {
     <div>
       <WorldMap>
         {/* Orbit path */}
-        <path
-          d={orbitPath
-            .map((p, i) => {
-              const [x, y] = projectToSVG(p.latitude, p.longitude);
-              return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-            })
-            .join(" ")}
-          stroke="#00ff00"
-          fill="none"
-          strokeWidth="40"
-        />
+        {orbitPath
+          .reduce<Position[][]>((segments, point) => {
+            if (segments.length === 0) return [[point]];
+            const lastSegment = segments[segments.length - 1];
+            const prevLon = lastSegment[lastSegment.length - 1].longitude;
+            const currLon = point.longitude;
+
+            if (Math.abs(currLon - prevLon) > 180) {
+              segments.push([point]);
+            } else {
+              lastSegment.push(point);
+            }
+            return segments;
+          }, [])
+          .map((segment, i) => (
+            <path
+              key={i}
+              d={segment
+                .map((p, idx) => {
+                  const [x, y] = projectToSVG(p.latitude, p.longitude);
+                  return `${idx === 0 ? "M" : "L"} ${x} ${y}`;
+                })
+                .join(" ")}
+              stroke="#00ff00"
+              fill="none"
+              strokeWidth="50"
+            />
+          ))}
         {/* Current position */}
         {currentPosition && (
           <circle
