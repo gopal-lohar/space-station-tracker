@@ -26,7 +26,7 @@ export default function Panels() {
         ? "Loading..."
         : tleQuery.isError
           ? "Error"
-          : tleQuery.data && <LeftPanel />}
+          : tleQuery.data && <LeftPanel tle={tleQuery.data} />}
 
       {location ? (
         <Passes location={location} />
