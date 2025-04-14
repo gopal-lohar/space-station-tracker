@@ -33,6 +33,7 @@ export async function getPasses(req: Request, res: Response): Promise<void> {
     let passes = [] as Pass[];
 
     if (tle) {
+      console.time("compute-pass");
       passes = computePasses({
         delta: 1000 * 30,
         observerLocation: { latitude, longitude, elevation: 0 },
@@ -40,6 +41,7 @@ export async function getPasses(req: Request, res: Response): Promise<void> {
         endTime: new Date(Date.now() + PERIOD),
         tle,
       });
+      console.timeEnd("compute-pass");
     }
 
     res.json(passes);
