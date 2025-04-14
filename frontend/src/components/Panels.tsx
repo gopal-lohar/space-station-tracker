@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { LeftPanel } from "./LeftPanel";
 import PassDetails from "./PassDetails";
 import PassesPanel from "./PassesPanel";
-import { Pass, queries } from "../queries";
+import { queries } from "../queries";
 import { useCallback, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { Pass } from "space-station-tracker-core";
 
 const LOCATION_KEY = "ss_detector_location";
 
@@ -18,9 +19,15 @@ export default function Panels() {
     LOCATION_KEY,
     null,
   );
+  const tleQuery = useQuery(queries.tleQuery("iss"));
   return (
     <div className="grid gap-8 h-[calc(100%-5rem)] pb-4 grid-cols-3">
-      <LeftPanel />
+      {tleQuery.isLoading
+        ? "Loading..."
+        : tleQuery.isError
+          ? "Error"
+          : tleQuery.data && <LeftPanel />}
+
       {location ? (
         <Passes location={location} />
       ) : (
